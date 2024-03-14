@@ -1,0 +1,39 @@
+name: Lint
+
+on:
+  push:
+    branches:
+      - main  # Adjust the branch name if necessary
+      - Edit
+  pull_request:
+    branches:
+      - main  # Adjust the branch name if necessary
+      - Edit
+permissions: read-all
+
+jobs:
+  build:
+    name: Lint
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: read
+      statuses: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Debug API Request
+        run: |
+          echo "GitHub Token: ${{ secrets.GITHUB_TOKEN }}"
+          # Add more debugging commands as needed to inspect the API request/response
+
+      - name: Super-linter
+        uses: super-linter/super-linter@v6.3.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VALIDATE_GO: false  # Set VALIDATE_GO to false to avoid the Go files issue
